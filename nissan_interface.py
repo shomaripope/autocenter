@@ -1,16 +1,43 @@
-
+# -*- coding: utf-8 -*-
 import random
+import platform
+import glob
 
 try:
     import can
 except ImportError:
     can = None  # Allow mock mode to run without python-can
 
+def get_can_bus(mock):
+    """Auto-selects the correct CAN interface based on OS and mock flag."""
+    if mock or not can:
+        return None
+
+    system = platform.system()
+    try:
+        if system == "Darwin":  # macOS
+            # Auto-detect CANable device
+            devices = glob.glob("/dev/tty.usb*")
+            if not devices:
+                raise FileNotFoundError("⚠️ No /dev/tty.usb* device found. Plug in your CANable or check cable.")
+            device_path = devices[0]
+            print(f"[INFO] Auto-detected CAN device: {device_path}")
+            return can.interface.Bus(channel=device_path, bustype='slcan', bitrate=500000)
+
+        elif system == "Linux":
+            return can.interface.Bus(channel='can0', bustype='socketcan')
+
+        else:
+            raise OSError("Unsupported OS for CAN interface")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to initialize CAN bus: {e}")
+        raise
+
 class NissanVehicle:
     def __init__(self, mock=False):
         self.mock = mock
-        if not self.mock and can:
-            self.bus = can.interface.Bus(channel='can0', bustype='socketcan')
+        self.bus = get_can_bus(mock)
 
     def speed(self):
         if self.mock:
@@ -32,7 +59,7 @@ class NissanVehicle:
         return 'UNKNOWN'
 
     def _recv_msg(self, arbitration_id, timeout=0.2):
-        if self.mock:
+        if self.mock or not self.bus:
             return None
         try:
             msg = self.bus.recv(timeout)
@@ -47,8 +74,7 @@ class NissanSteering:
         self.mock = mock
         self.mock_angle = 15.0
         self.mock_driver_torque = 0.0
-        if not self.mock and can:
-            self.bus = can.interface.Bus(channel='can0', bustype='socketcan')
+        self.bus = get_can_bus(mock)
 
     def get_angle(self):
         if self.mock:
@@ -76,6 +102,10 @@ class NissanSteering:
             print(f"[MOCK] Simulated steering torque applied: {value}")
             return
 
+        if not self.bus:
+            print("[ERROR] CAN bus not initialized")
+            return
+
         torque = int(value * 10) & 0xFF
         msg = can.Message(arbitration_id=0x2D4, data=[torque, 0x00, 0x00, 0, 0, 0, 0, 0], is_extended_id=False)
         try:
@@ -88,7 +118,7 @@ class NissanSteering:
         self.send_torque(0)
 
     def _recv_msg(self, arbitration_id, timeout=0.2):
-        if self.mock:
+        if self.mock or not self.bus:
             return None
         try:
             msg = self.bus.recv(timeout)
