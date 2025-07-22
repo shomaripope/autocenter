@@ -4,7 +4,7 @@ This module adds automatic steering wheel centering functionality to OpenPilot-c
 
 ---
 
-## 🚘 Features
+## Features
 
 - Detects when the vehicle is in Park and at rest
 - Applies proportional steering torque to center the wheel back to 0°
@@ -14,7 +14,7 @@ This module adds automatic steering wheel centering functionality to OpenPilot-c
 
 ---
 
-## 🧱 File Structure
+## File Structure
 
 | File                        | Purpose                                                |
 | --------------------------- | ------------------------------------------------------ |
@@ -25,16 +25,16 @@ This module adds automatic steering wheel centering functionality to OpenPilot-c
 
 ---
 
-## 🖥️ Requirements
+## Requirements
 
-### ✅ For Simulation
+### For Simulation
 
 - Python 3.8+
 - Git
 - pip
 - Linux, macOS, or Windows (for mock test only)
 
-### ✅ For Real Vehicle Integration
+### For Real Vehicle Integration
 
 - [OpenPilot](https://github.com/commaai/openpilot) fork installed
 - Supported Nissan vehicle (see OpenPilot wiki)
@@ -42,7 +42,7 @@ This module adds automatic steering wheel centering functionality to OpenPilot-c
 
 ---
 
-## 🧪 Quick Start (Simulation Mode)
+## Quick Start (Simulation Mode)
 
 1. Clone or download this repo
 2. Run the simulation:
@@ -55,7 +55,7 @@ python3 mock_simulation_runner.py
 
 ---
 
-## 🔧 Installation (Real Vehicle / OpenPilot Integration)
+## Installation (Real Vehicle / OpenPilot Integration)
 
 1. **Fork OpenPilot**
 
@@ -81,7 +81,7 @@ cd openpilot/selfdrive/car/nissan
 
 ---
 
-## 🛠️ Debugging Tools
+## Debugging Tools
 
 | Tool          | Usage                              |
 | ------------- | ---------------------------------- |
@@ -92,7 +92,7 @@ cd openpilot/selfdrive/car/nissan
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 - When the car is in Park (`gearShifter == 'park'`) and speed is \~0, the system calculates:
   ```
@@ -103,16 +103,17 @@ cd openpilot/selfdrive/car/nissan
 
 ---
 
-## 🔐 Licensing & Patent Notice
+## Licensing & Patent Notice
 
 This project implements novel behavior that may be eligible for patent protection. Do not commercialize without permission from the author.
 
-© 2025 Ari Pope. All rights reserved.
+© 2025 Shomari (Ari) Pope. All rights reserved.
 
 ---
 
-## 🙋 Need Help?
+## Need Help?
 
 - GitHub: [https://github.com/shomaripope](https://github.com/shomaripope)
-- Email: [shomari@shomaripope.com](mailto\:shomari@shomaripope.com)
+- Email: [shomaripope@gmail.com](mailto\:shomari@shomaripope.com)
+- Portfolio: [http://shomaripope](http://shomaripope.com)
 
